@@ -1,0 +1,95 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "dev.hong481.pixo.test"
+
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+
+        versionCode 1
+        versionName "1.0"
+
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner rootProject.ext.testInstrumentationRunner
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
+    kotlinOptions {
+        jvmTarget = rootProject.ext.javaVersion.toString()
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    namespace 'dev.hong481.pixo.test'
+}
+
+dependencies {
+
+    implementation "androidx.core:core-ktx:${rootProject.ext.coreKtxVersion}"
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompatVersion}"
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintLayoutVersion}"
+
+    // AAC - Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:${rootProject.ext.navigationVersion}"
+    implementation "androidx.navigation:navigation-ui-ktx:${rootProject.ext.navigationVersion}"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:${rootProject.ext.navigationVersion}"
+    implementation "androidx.navigation:navigation-compose:${rootProject.ext.navigationVersion}"
+
+    // AAC - ViewModel and LiveData and Lifecycle
+    implementation "androidx.lifecycle:lifecycle-service:${rootProject.ext.lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${rootProject.ext.lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${rootProject.ext.lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${rootProject.ext.lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:${rootProject.ext.lifecycleVersion}"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:${rootProject.ext.hiltVersion}"
+    kapt "com.google.dagger:hilt-android-compiler:${rootProject.ext.hiltVersion}"
+    implementation "androidx.hilt:hilt-navigation-compose:${rootProject.ext.hiltNavigationComposeVersion}"
+
+    // SVG library
+    implementation "com.caverock:androidsvg-aar:${rootProject.ext.androidsvgVersion}"
+
+    // Test
+    testImplementation "junit:junit:${rootProject.ext.junitVersion}"
+    androidTestImplementation "androidx.test.ext:junit:${rootProject.ext.junitAndroidVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.ext.espressoCoreVersion}"
+}
+
+def createApk() {
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            if (outputFileName.endsWith('.apk')) {
+                def date = new Date().format('yyyyMMddHHmm')
+                def dir = "./apk/" + variant.applicationId + "/" + variant.versionName + "(" + variant.versionCode + ')'
+                def apk = variant.applicationId + "-" + variant.versionName + "(" + variant.versionCode + ")" + "-" + date + ".apk"
+                outputFileName = new File(dir, apk)
+            }
+        }
+    }
+}

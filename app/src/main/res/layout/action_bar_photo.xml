@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_fffbe6"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/img_btn_back"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginBottom="14dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:contentDescription="@string/ib_content_description"
+        android:scaleType="centerInside"
+        android:src="@drawable/back_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="1dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginBottom="14dp"
+        android:background="@color/color_e3dcb8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/img_btn_back"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/color_336959"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/v_line"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/minimal" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/albumListFragment">
+
+    <fragment
+        android:id="@+id/albumListFragment"
+        android:name="dev.hong481.pixo.test.ui.screen.albumlist.AlbumListFragment"
+        android:label="AlbumListFragment"
+        tools:layout="@layout/fragment_album_list">
+
+        <action
+            android:id="@+id/action_albumListFragment_to_photoPickerFragment"
+            app:destination="@id/photoPickerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoPickerFragment"
+        android:name="dev.hong481.pixo.test.ui.screen.photopicker.PhotoPickerFragment"
+        android:label="PhotoPickerFragment"
+        tools:layout="@layout/fragment_photo_picker">
+
+        <action
+            android:id="@+id/action_photoPickerFragment_to_albumListFragment"
+            app:destination="@id/albumListFragment" />
+        <action
+            android:id="@+id/action_photoPickerFragment_to_editPhotoFragment"
+            app:destination="@id/editPhotoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPhotoFragment"
+        android:name="dev.hong481.pixo.test.ui.screen.editphoto.EditPhotoFragment"
+        android:label="EditPhotoFragment"
+        tools:layout="@layout/fragment_edit_photo">
+        <action
+            android:id="@+id/action_editPhotoFragment_to_photoPickerFragment"
+            app:destination="@id/photoPickerFragment" />
+        <action
+            android:id="@+id/action_editPhotoFragment_to_albumListFragment"
+            app:destination="@id/albumListFragment" />
+    </fragment>
+</navigation>

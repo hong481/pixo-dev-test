@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">pixo_dev_test</string>
+
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="album_list_fragment_label">ALBUM LIST</string>
+
+
+    <string name="minimal">Minimal</string>
+    <string name="my_album">My Albums</string>
+
+
+    <string name="next">Next</string>
+
+    <string name="iv_content_description">ImageView</string>
+    <string name="ib_content_description">ImageButton</string>
+</resources>

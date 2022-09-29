@@ -17,7 +17,6 @@ import javax.inject.Singleton
  * @link <a href="https://github.com/BigBadaboom/androidsvg">
  *     https://github.com/BigBadaboom/androidsvg</a>
  */
-@Singleton
 class SVGUtil @Inject constructor() {
 
     companion object {

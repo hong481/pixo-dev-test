@@ -3,11 +3,9 @@ package dev.hong481.pixo.test.ui.screen.albumlist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.hong481.pixo.test.R
-import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.databinding.FragmentAlbumListBinding
 import dev.hong481.pixo.test.ui.base.fragment.BaseFragment
 import dev.hong481.pixo.test.ui.screen.MainViewModel
@@ -20,6 +18,8 @@ class AlbumListFragment : BaseFragment<FragmentAlbumListBinding>() {
 
     companion object {
         const val TAG = "AlbumListFragment"
+
+        const val RECYCLE_VIEW_SPAN_COUNT = 2
     }
 
     private val mainViewModel: MainViewModel by viewModels()
@@ -37,15 +37,18 @@ class AlbumListFragment : BaseFragment<FragmentAlbumListBinding>() {
     override fun initView() {
         binding.rvAlbum.run {
             this.layoutManager =
-                GridLayoutManager(this@AlbumListFragment.lifecycleContext, 2).apply {
-
-                }
+                GridLayoutManager(this@AlbumListFragment.lifecycleContext, RECYCLE_VIEW_SPAN_COUNT)
             this.adapter = AlbumListAdapter(
                 this@AlbumListFragment.lifecycleContext,
                 this@AlbumListFragment,
                 viewModel
             )
-            this.addItemDecoration(SpacesItemDecoration(8))
+            this.addItemDecoration(
+                SpacesItemDecoration(
+                    spanCount = RECYCLE_VIEW_SPAN_COUNT,
+                    spacing = context.resources.getDimensionPixelSize(R.dimen.album_list_padding)
+                )
+            )
         }
     }
 

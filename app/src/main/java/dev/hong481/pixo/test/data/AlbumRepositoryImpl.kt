@@ -54,7 +54,7 @@ class AlbumRepositoryImpl(
                             val album = Album(
                                 id = bucketId,
                                 name = bucketName,
-                                uri = uri,
+                                uriString = uri.toString(),
                                 count = 1
                             )
                             findAlbums[bucketId] = album

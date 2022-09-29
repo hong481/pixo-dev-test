@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
 class SpacesItemDecoration(
 
-    private val space: Int
+    private val spanCount: Int = 0,
+    private val spacing: Int = 0,
+    private val includeEdge: Boolean = false
 
 ) : ItemDecoration() {
+
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -18,13 +21,21 @@ class SpacesItemDecoration(
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        outRect.left = space
-        outRect.right = space
-        outRect.bottom = space
-        if (parent.getChildLayoutPosition(view) == 0) {
-            outRect.top = space
+        val position = parent.getChildAdapterPosition(view)
+        val column = position % spanCount
+        if (includeEdge) {
+            outRect.left = spacing - column * spacing / spanCount
+            outRect.right = (column + 1) * spacing / spanCount
+            if (position < spanCount) {
+                outRect.top = spacing
+            }
+            outRect.bottom = spacing
         } else {
-            outRect.top = 0
+            outRect.left = column * spacing / spanCount
+            outRect.right = spacing - (column + 1) * spacing / spanCount
+            if (position >= spanCount) {
+                outRect.top = spacing
+            }
         }
     }
 }

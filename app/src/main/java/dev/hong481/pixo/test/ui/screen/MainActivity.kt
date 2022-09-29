@@ -3,7 +3,6 @@ package dev.hong481.pixo.test.ui.screen
 
 import android.Manifest
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.os.Build
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
@@ -16,7 +15,9 @@ import dev.hong481.pixo.test.R
 import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.databinding.ActivityMainBinding
 import dev.hong481.pixo.test.ui.base.activity.BaseActivity
+import dev.hong481.pixo.test.util.DisplayUtil
 import dev.hong481.pixo.test.util.base.livedata.EventObserver
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {

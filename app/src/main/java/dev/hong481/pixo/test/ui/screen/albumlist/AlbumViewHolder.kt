@@ -1,6 +1,7 @@
 package dev.hong481.pixo.test.ui.screen.albumlist
 
 import android.content.Context
+import android.net.Uri
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -18,18 +19,17 @@ class AlbumViewHolder(
     lifecycleOwner: LifecycleOwner,
     viewModel: ViewModel,
 
-) : BaseRecyclerViewHolder<Album>(viewGroup, R.layout.item_album) {
+    ) : BaseRecyclerViewHolder<Album>(viewGroup, R.layout.item_album) {
 
     private val binding: ItemAlbumBinding by lazy {
         ItemAlbumBinding.bind(itemView)
     }
 
 
-
     /**
      * 타이틀.
      */
-    val titleText : LiveData<String> = item.map {
+    val titleText: LiveData<String> = item.map {
         it.name
     }
 
@@ -45,7 +45,7 @@ class AlbumViewHolder(
      */
     fun loadThumbnail() {
         Glide.with(context)
-            .load(item.value?.uri)
+            .load(Uri.parse(item.value?.uriString))
             .centerCrop()
             .into(binding.ivThumbnail)
     }

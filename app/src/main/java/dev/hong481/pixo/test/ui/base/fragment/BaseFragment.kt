@@ -56,6 +56,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
      */
     open fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         binding = inflate(inflater, container)
+        binding.lifecycleOwner = this
     }
 
     /**

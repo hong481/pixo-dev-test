@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import dev.hong481.pixo.test.R
 import dev.hong481.pixo.test.databinding.FragmentPhotoPickerBinding
@@ -21,6 +22,8 @@ class PhotoPickerFragment : BaseFragment<FragmentPhotoPickerBinding>() {
 
     private val mainViewModel: MainViewModel by viewModels()
     private val viewModel: PhotoPickerViewModel by viewModels()
+
+    private val args: PhotoPickerFragmentArgs by navArgs()
 
     override fun getLayoutRes(): Int = R.layout.fragment_photo_picker
 
@@ -45,12 +48,10 @@ class PhotoPickerFragment : BaseFragment<FragmentPhotoPickerBinding>() {
      */
     private fun handleMainViewEvent(event: MainViewModel.ViewEvent) = when (event) {
         is MainViewModel.ViewEvent.ActionMoveToPhotoEditor -> {
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_photoPickerFragment_to_editPhotoFragment)
+            navController.navigate(R.id.action_photoPickerFragment_to_editPhotoFragment)
         }
         is MainViewModel.ViewEvent.ActionMoveToAlbumList -> {
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_photoPickerFragment_to_albumListFragment)
+            navController.navigate(R.id.action_photoPickerFragment_to_albumListFragment)
         }
         else -> Unit
     }

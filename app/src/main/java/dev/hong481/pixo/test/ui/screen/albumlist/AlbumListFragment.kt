@@ -4,11 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.hong481.pixo.test.R
+import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.databinding.FragmentAlbumListBinding
 import dev.hong481.pixo.test.ui.base.fragment.BaseFragment
 import dev.hong481.pixo.test.ui.screen.MainViewModel
+import dev.hong481.pixo.test.ui.view.decoration.SpacesItemDecoration
+import dev.hong481.pixo.test.util.base.extension.lifecycleContext
 import dev.hong481.pixo.test.util.base.livedata.EventObserver
 
 @AndroidEntryPoint
@@ -31,11 +35,25 @@ class AlbumListFragment : BaseFragment<FragmentAlbumListBinding>() {
     }
 
     override fun initView() {
-        // todo
+        binding.rvAlbum.run {
+            this.layoutManager =
+                GridLayoutManager(this@AlbumListFragment.lifecycleContext, 2).apply {
+
+                }
+            this.adapter = AlbumListAdapter(
+                this@AlbumListFragment.lifecycleContext,
+                this@AlbumListFragment,
+                viewModel
+            )
+            this.addItemDecoration(SpacesItemDecoration(8))
+        }
     }
 
     override fun initViewModel() {
         mainViewModel.eventLiveData.observe(viewLifecycleOwner, EventObserver {
+            handleMainViewEvent(it)
+        })
+        viewModel.eventLiveData.observe(viewLifecycleOwner, EventObserver {
             handleMainViewEvent(it)
         })
     }
@@ -43,11 +61,17 @@ class AlbumListFragment : BaseFragment<FragmentAlbumListBinding>() {
     /**
      * MainViewModel Event 핸들링.
      */
-    private fun handleMainViewEvent(event: MainViewModel.ViewEvent) = when (event) {
-        is MainViewModel.ViewEvent.ActionMoveToPhotoPicker -> {
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_albumListFragment_to_photoPickerFragment)
+    private fun handleMainViewEvent(event: MainViewModel.ViewEvent) {
+        when (event) {
+            is MainViewModel.ViewEvent.ActionMoveToPhotoPicker -> {
+                val selectedAlbum = event.selectedAlbum ?: return
+                val action =
+                    AlbumListFragmentDirections.actionAlbumListFragmentToPhotoPickerFragment(
+                        selectedAlbum
+                    )
+                navController.navigate(action)
+            }
+            else -> {}
         }
-        else -> Unit
     }
 }

@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_photoPickerFragment_to_editPhotoFragment"
             app:destination="@id/editPhotoFragment" />
+        <argument
+            android:name="selectedAlbum"
+            app:argType="dev.hong481.pixo.test.data.model.Album" />
     </fragment>
     <fragment
         android:id="@+id/editPhotoFragment"
@@ -39,5 +42,8 @@
         <action
             android:id="@+id/action_editPhotoFragment_to_albumListFragment"
             app:destination="@id/albumListFragment" />
+        <argument
+            android:name="selectedAlbum"
+            app:argType="dev.hong481.pixo.test.data.model.Album" />
     </fragment>
 </navigation>

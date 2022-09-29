@@ -1,13 +1,19 @@
 package dev.hong481.pixo.test.ui.screen
 
-import android.os.Bundle
+
+import android.Manifest
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.os.Build
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import dev.hong481.pixo.test.R
+import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.databinding.ActivityMainBinding
 import dev.hong481.pixo.test.ui.base.activity.BaseActivity
 import dev.hong481.pixo.test.util.base.livedata.EventObserver
@@ -16,6 +22,7 @@ import dev.hong481.pixo.test.util.base.livedata.EventObserver
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     companion object {
+        private const val READ_EXTERNAL_STORAGE_REQUEST = 0x1045
         const val TAG = "MainActivity"
     }
 
@@ -42,12 +49,54 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         viewModel.eventLiveData.observe(this, EventObserver {
             handleViewEvent(it)
         })
+
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            READ_EXTERNAL_STORAGE_REQUEST -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
+                    //  todo
+                } else {
+                    val showRationale = ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                    if (!showRationale) {
+                        // todo
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 권한 요청.
+     */
+    override fun requestPermission() {
+        if (!haveStoragePermission()) {
+            val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            ActivityCompat.requestPermissions(this, permissions, READ_EXTERNAL_STORAGE_REQUEST)
+        }
+    }
+
+    /**
+     * 외부 저장소 권한 확인.
+     */
+    private fun haveStoragePermission() = ContextCompat.checkSelfPermission(
+        this, Manifest.permission.READ_EXTERNAL_STORAGE
+    ) == PERMISSION_GRANTED
+
 
     /**
      * [NavController] 초기 설정.
      */
-    private fun initNav() = navController.addOnDestinationChangedListener { _, destination, _ ->
+    private fun initNav() = navController.addOnDestinationChangedListener { _, destination, args ->
         binding.actionBarAlbumList.root.visibility =
             if (destination.id == R.id.albumListFragment) View.VISIBLE else View.GONE
 
@@ -69,14 +118,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }"
                 )
                 binding.actionBarPhoto.run {
-                    this.imgBtnBack.setOnClickListener {
-                        when (destination.id) {
-                            R.id.photoPickerFragment -> viewModel.actionMoveToAlbumListEvent()
-                            R.id.editPhotoFragment -> viewModel.actionMoveToPhotoPickerEvent()
+                    val selectedAlbum = args?.getSerializable(Album.key) as? Album
+                    selectedAlbum?.let {
+                        viewModel.setSelectedAlbum(it)
+                    }
+                    when (destination.id) {
+                        // Back
+                        R.id.photoPickerFragment -> {
+                            this.imgBtnBack.setOnClickListener {
+                                viewModel.actionMoveToAlbumListEvent()
+                            }
+                        }
+                        // Back
+                        R.id.editPhotoFragment -> this.imgBtnBack.setOnClickListener {
+                            viewModel.actionMoveToPhotoPickerEvent()
                         }
                     }
-                    // todo Set Album Title
-                    this.tvTitle.text = ""
                 }
             }
         }
@@ -97,9 +154,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         is MainViewModel.ViewEvent.ActionMoveToPhotoPicker -> {
             navController.navigate(R.id.photoPickerFragment)
         }
-        is MainViewModel.ViewEvent.ActionMoveToPhotoEditor -> {
-            navController.navigate(R.id.editPhotoFragment)
-        }
+        else -> Unit
     }
 
 

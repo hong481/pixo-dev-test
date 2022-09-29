@@ -23,16 +23,25 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestPermission()
+
         initBinding()
         initView()
         initViewModel()
     }
 
     /**
+     * 권한 요청.
+     */
+    abstract fun requestPermission()
+
+    /**
      * Binding 초기화.
      */
     open fun initBinding() {
         binding = setContentView()
+        binding.lifecycleOwner = this
     }
 
     /**

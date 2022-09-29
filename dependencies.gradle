@@ -24,6 +24,7 @@ ext {
     hiltVersion = '2.42'
     hiltNavigationComposeVersion = '1.0.0'
 
+    glideVersion = '4.13.0'
     androidsvgVersion = '1.4'
 
     junitVersion = '4.13.2'

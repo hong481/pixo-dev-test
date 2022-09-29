@@ -11,6 +11,7 @@
     <string name="my_album">My Albums</string>
 
 
+    <string name="image_count_format">%d images</string>
     <string name="next">Next</string>
 
     <string name="iv_content_description">ImageView</string>

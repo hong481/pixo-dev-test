@@ -46,6 +46,7 @@
             <include
                 android:id="@+id/action_bar_photo"
                 layout="@layout/action_bar_photo"
+                app:appBarTitleText="@{viewModel.photoAppBarTitleText}"
                 tools:visibility="gone" />
 
 

@@ -2,10 +2,13 @@ package dev.hong481.pixo.test.ui.screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.ui.base.viewmodel.BaseViewModel
 import dev.hong481.pixo.test.util.base.extension.notify
 import dev.hong481.pixo.test.util.base.extension.postNotify
+import dev.hong481.pixo.test.util.base.extension.setValueIfNew
 import dev.hong481.pixo.test.util.base.livedata.Event
 import javax.inject.Inject
 
@@ -19,6 +22,20 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     private val _eventLiveData = MutableLiveData<Event<ViewEvent>>()
     val eventLiveData: LiveData<Event<ViewEvent>>
         get() = _eventLiveData
+
+    /**
+     * 선택된 [Album]
+     */
+    private val _selectedAlbum = MutableLiveData<Album?>()
+    val selectedAlbum: LiveData<Album?> = _selectedAlbum
+
+
+    /**
+     * PhotoAppbar Title Text
+     */
+    val photoAppBarTitleText: LiveData<String> = _selectedAlbum.map {
+        it?.name ?: ""
+    }
 
     /**
      * 현재 NavController Destination.
@@ -48,19 +65,28 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     /**
      * 사진 선택 Fragment 이동 이벤트.
      */
-    fun actionMoveToPhotoPickerEvent() = viewEvent(ViewEvent.ActionMoveToPhotoPicker)
+    fun actionMoveToPhotoPickerEvent() = viewEvent(ViewEvent.ActionMoveToPhotoPicker())
 
     /**
      * 사진 편집 Fragment 이동 이벤트.
      */
-    fun actionMoveToPhotoEditorEvent() = viewEvent(ViewEvent.ActionMoveToPhotoEditor)
+    fun actionMoveToPhotoEditorEvent() = viewEvent(ViewEvent.ActionMoveToPhotoEditor())
+
+
+    fun setSelectedAlbum(album: Album) {
+        _selectedAlbum.value = album
+    }
 
     sealed class ViewEvent {
 
         object ActionMoveToAlbumList : ViewEvent()
 
-        object ActionMoveToPhotoPicker : ViewEvent()
+        data class ActionMoveToPhotoPicker(
+            val selectedAlbum: Album? = null
+        ) : ViewEvent()
 
-        object ActionMoveToPhotoEditor : ViewEvent()
+        data class ActionMoveToPhotoEditor(
+            val selectedAlbum: Album? = null
+        ) : ViewEvent()
     }
 }

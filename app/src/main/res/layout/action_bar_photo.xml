@@ -9,6 +9,10 @@
         <variable
             name="appBarTitleText"
             type="String" />
+
+        <variable
+            name="isVisibleOverlayButton"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,6 +65,26 @@
             app:layout_constraintStart_toEndOf="@id/v_line"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/minimal" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_overlay"
+            android:layout_width="103dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="117dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/button_overlay"
+            android:text="@string/overlay"
+            android:textAllCaps="false"
+            android:textColor="@color/color_ffffff"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:isVisibility="@{isVisibleOverlayButton}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_title"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

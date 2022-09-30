@@ -4,12 +4,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
+    <data>
+
+        <variable
+            name="viewHolder"
+            type="dev.hong481.pixo.test.ui.screen.editphoto.StickerViewHolder" />
+
+
+        <variable
+            name="viewModel"
+            type="dev.hong481.pixo.test.ui.screen.editphoto.StickerViewHolder.ViewModel" />
+    </data>
+
+
     <com.caverock.androidsvg.SVGImageView
         android:id="@+id/iv_sticker"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:background="@drawable/item_sticker_background"
         android:contentDescription="@string/iv_content_description"
+        android:onClick="@{() -> viewModel.selectSticker(viewHolder.item)}"
         android:padding="12dp"
         android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"

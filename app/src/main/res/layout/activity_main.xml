@@ -47,6 +47,7 @@
                 android:id="@+id/action_bar_photo"
                 layout="@layout/action_bar_photo"
                 app:appBarTitleText="@{viewModel.photoAppBarTitleText}"
+                app:isVisibleOverlayButton="@{viewModel.isVisibleOverlayButton}"
                 tools:visibility="gone" />
 
 

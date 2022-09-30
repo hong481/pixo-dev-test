@@ -2,6 +2,7 @@ package dev.hong481.pixo.test.ui.screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.hong481.pixo.test.data.model.Album
@@ -9,6 +10,7 @@ import dev.hong481.pixo.test.ui.base.viewmodel.BaseViewModel
 import dev.hong481.pixo.test.util.base.extension.notify
 import dev.hong481.pixo.test.util.base.extension.postNotify
 import dev.hong481.pixo.test.util.base.livedata.Event
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,21 +31,20 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     val selectedAlbum: LiveData<Album?> = _selectedAlbum
 
     /**
-     * PhotoAppbar Title Text
+     * PhotoAppbar Title Text.
      */
     val photoAppBarTitleText: LiveData<String> = _selectedAlbum.map {
         it?.name ?: ""
     }
 
     /**
-     * 현재 NavController Destination.
+     * PhotoAppbar Overlay Button Visible.
      */
-    private val _currentDestination = MutableLiveData<Int>()
-    val currentDestination: LiveData<Int>
-        get() = _currentDestination
+    private val _isVisibleOverlayButton = MutableLiveData(false)
+    val isVisibleOverlayButton: LiveData<Boolean> = _isVisibleOverlayButton
 
-    fun setCurrentDestination(resourceId: Int) {
-        _currentDestination.value = resourceId
+    fun setIsVisibleOverlayButton(isVisible: Boolean) {
+        _isVisibleOverlayButton.value = isVisible
     }
 
     /**
@@ -63,7 +64,8 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     /**
      * 사진 선택 Fragment 이동 이벤트.
      */
-    fun actionMoveToPhotoPickerEvent(album: Album) = viewEvent(ViewEvent.ActionMoveToPhotoPicker(album))
+    fun actionMoveToPhotoPickerEvent(album: Album) =
+        viewEvent(ViewEvent.ActionMoveToPhotoPicker(album))
 
 
     fun setSelectedAlbum(album: Album) {

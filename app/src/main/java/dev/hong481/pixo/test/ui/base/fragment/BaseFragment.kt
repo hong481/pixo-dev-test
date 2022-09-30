@@ -69,5 +69,9 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
      */
     abstract fun initViewModel()
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
 
 }

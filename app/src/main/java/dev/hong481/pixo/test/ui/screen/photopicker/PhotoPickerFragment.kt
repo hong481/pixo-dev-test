@@ -3,6 +3,7 @@ package dev.hong481.pixo.test.ui.screen.photopicker
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,7 +26,7 @@ class PhotoPickerFragment : BaseFragment<FragmentPhotoPickerBinding>() {
         const val RECYCLE_VIEW_SPAN_COUNT = 3
     }
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: PhotoPickerViewModel by viewModels()
 
     private val args: PhotoPickerFragmentArgs by navArgs()
@@ -34,6 +35,7 @@ class PhotoPickerFragment : BaseFragment<FragmentPhotoPickerBinding>() {
 
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         super.initBinding(inflater, container)
+
         binding.mainViewModel = mainViewModel
         binding.viewModel = viewModel
 

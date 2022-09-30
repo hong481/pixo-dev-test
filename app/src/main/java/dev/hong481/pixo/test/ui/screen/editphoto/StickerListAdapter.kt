@@ -1,20 +1,16 @@
 package dev.hong481.pixo.test.ui.screen.editphoto
 
-import android.content.Context
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import dev.hong481.pixo.test.data.model.Sticker
 import dev.hong481.pixo.test.ui.base.recyclerview.BaseRecyclerViewAdapter
 import dev.hong481.pixo.test.ui.base.recyclerview.BaseRecyclerViewHolder
-import dev.hong481.pixo.test.util.SVGUtil
 
 class StickerListAdapter(
 
-    private val context: Context,
     private val lifecycleOwner: LifecycleOwner,
-    private val viewModel: StickerViewHolder.ViewModel,
-    private val svgUtil: SVGUtil
+    private val viewModel: StickerViewHolder.ViewModel
 
 ) : BaseRecyclerViewAdapter<Sticker>() {
 
@@ -22,8 +18,6 @@ class StickerListAdapter(
         parent: ViewGroup,
         viewType: Int
     ): BaseRecyclerViewHolder<Sticker> = StickerViewHolder(
-        context,
-        svgUtil,
         parent,
         lifecycleOwner,
         viewModel,

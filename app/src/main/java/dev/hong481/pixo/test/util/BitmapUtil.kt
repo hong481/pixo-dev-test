@@ -3,6 +3,7 @@ package dev.hong481.pixo.test.util
 import android.content.Context
 import android.graphics.*
 import android.net.Uri
+import androidx.annotation.ColorInt
 import androidx.core.graphics.scale
 import java.io.IOException
 import java.lang.Integer.min
@@ -71,7 +72,7 @@ fun Bitmap.scalePreserveRatio(
 
     // 백그라운드 색상 변경.
     canvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(), Paint().apply {
-        color = Color.BLACK
+        color = Color.TRANSPARENT
         style = Paint.Style.FILL
     })
 
@@ -91,6 +92,72 @@ fun Bitmap.scalePreserveRatio(
     scaledImage
 } else {
     this
+}
+
+/**
+ *
+ * [Bitmap] 특정 픽셀 trim.
+ */
+fun Bitmap.trim(
+    @ColorInt color: Int = Color.TRANSPARENT
+): Bitmap {
+    var top = height
+    var bottom = 0
+    var right = width
+    var left = 0
+    var colored = IntArray(width) { color }
+    var buffer = IntArray(width)
+    for (y in 0 until top) {
+        getPixels(buffer, 0, width, 0, y, width, 1)
+        if (!colored.contentEquals(buffer)) {
+            bottom = y
+            break
+        }
+    }
+    for (y in top - 1 downTo bottom) {
+        getPixels(buffer, 0, width, 0, y, width, 1)
+        if (!colored.contentEquals(buffer)) {
+            top = y
+            break
+        }
+    }
+    val heightRemaining = top - bottom
+    colored = IntArray(heightRemaining) { color }
+    buffer = IntArray(heightRemaining)
+    for (x in 0 until right) {
+        getPixels(buffer, 0, 1, x, bottom, 1, heightRemaining)
+        if (!colored.contentEquals(buffer)) {
+            left = x
+            break
+        }
+    }
+    for (x in right - 1 downTo left) {
+        getPixels(buffer, 0, 1, x, bottom, 1, heightRemaining)
+        if (!colored.contentEquals(buffer)) {
+            right = x
+            break
+        }
+    }
+    return Bitmap.createBitmap(this, left, bottom, right - left, top - bottom)
+}
+
+/**
+ * [Bitmap] 오버레이.
+ */
+fun Bitmap.overlayBitmap(overlay: Bitmap): Bitmap? {
+    val sourceWidth = this.width
+    val sourceHeight = this.height
+    val overlayWidth = overlay.width
+    val overlayHeight = overlay.height
+    val marginLeft = (sourceWidth * 0.5 - overlayWidth * 0.5).toFloat()
+    val marginTop = (sourceHeight * 0.5 - overlayHeight * 0.5).toFloat()
+    val overlayBitmap = Bitmap.createBitmap(sourceWidth, sourceHeight, this.config)
+    val canvas = Canvas(overlayBitmap)
+
+    canvas.drawBitmap(this, Matrix(), null)
+    canvas.drawBitmap(overlay, marginLeft, marginTop, null)
+
+    return overlayBitmap
 }
 
 /**

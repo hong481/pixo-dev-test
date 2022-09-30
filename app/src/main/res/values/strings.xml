@@ -16,4 +16,5 @@
 
     <string name="iv_content_description">ImageView</string>
     <string name="ib_content_description">ImageButton</string>
+    <string name="overlay">Overlay</string>
 </resources>

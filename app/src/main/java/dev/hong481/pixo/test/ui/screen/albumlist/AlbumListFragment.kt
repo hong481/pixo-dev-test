@@ -2,6 +2,7 @@ package dev.hong481.pixo.test.ui.screen.albumlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +23,7 @@ class AlbumListFragment : BaseFragment<FragmentAlbumListBinding>() {
         const val RECYCLE_VIEW_SPAN_COUNT = 2
     }
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val viewModel: AlbumListViewModel by viewModels()
 

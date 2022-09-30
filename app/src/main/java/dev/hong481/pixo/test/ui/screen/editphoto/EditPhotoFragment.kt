@@ -1,19 +1,22 @@
 package dev.hong481.pixo.test.ui.screen.editphoto
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.caverock.androidsvg.SVG
 import dagger.hilt.android.AndroidEntryPoint
 import dev.hong481.pixo.test.R
+import dev.hong481.pixo.test.data.model.Sticker
 import dev.hong481.pixo.test.databinding.FragmentEditPhotoBinding
 import dev.hong481.pixo.test.ui.base.fragment.BaseFragment
 import dev.hong481.pixo.test.ui.screen.MainViewModel
-import dev.hong481.pixo.test.ui.view.decoration.GridSpacesItemDecoration
 import dev.hong481.pixo.test.ui.view.decoration.HorizontalSpaceItemDecoration
 import dev.hong481.pixo.test.util.SVGUtil
-import dev.hong481.pixo.test.util.base.extension.lifecycleContext
 import dev.hong481.pixo.test.util.base.livedata.EventObserver
 import javax.inject.Inject
 
@@ -25,7 +28,7 @@ class EditPhotoFragment : BaseFragment<FragmentEditPhotoBinding>() {
         const val TAG = "EditPhotoFragment"
     }
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: EditPhotoViewModel by viewModels()
 
     private val args: EditPhotoFragmentArgs by navArgs()
@@ -48,10 +51,8 @@ class EditPhotoFragment : BaseFragment<FragmentEditPhotoBinding>() {
 
         binding.rvSticker.run {
             this.adapter = StickerListAdapter(
-                this@EditPhotoFragment.lifecycleContext,
                 this@EditPhotoFragment,
-                viewModel,
-                svgUtil
+                viewModel
             )
             this.addItemDecoration(
                 HorizontalSpaceItemDecoration(
@@ -63,12 +64,34 @@ class EditPhotoFragment : BaseFragment<FragmentEditPhotoBinding>() {
     }
 
     override fun initViewModel() {
-
-        viewModel.getSvgStickerList()
-
         mainViewModel.eventLiveData.observe(viewLifecycleOwner, EventObserver {
             handleMainViewEvent(it)
+            mainViewModel.setIsVisibleOverlayButton(false)
         })
+        viewModel.selectStickerEvent.observe(viewLifecycleOwner, EventObserver { sticker ->
+            canvasStickerOverlay(sticker) {
+                mainViewModel.setIsVisibleOverlayButton(true)
+            }
+        })
+    }
+
+    /**
+     * 캔버스에 스티커를 Overlay.
+     */
+    private fun canvasStickerOverlay(sticker: Sticker, done: (() -> Unit)) {
+        val inputStream = sticker.path?.let { it ->
+            assetManager?.open(it)
+        } ?: return
+        val svg = SVG.getFromInputStream(inputStream)
+        val stickerBitmap = Bitmap.createBitmap(
+            binding.vCanvas.width,
+            binding.vCanvas.height,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(stickerBitmap)
+        svg.renderToCanvas(canvas)
+
+        binding.vCanvas.overlay(stickerBitmap, done)
     }
 
     /**

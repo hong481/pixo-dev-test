@@ -9,7 +9,7 @@ import dev.hong481.pixo.test.R
 import dev.hong481.pixo.test.databinding.FragmentAlbumListBinding
 import dev.hong481.pixo.test.ui.base.fragment.BaseFragment
 import dev.hong481.pixo.test.ui.screen.MainViewModel
-import dev.hong481.pixo.test.ui.view.decoration.SpacesItemDecoration
+import dev.hong481.pixo.test.ui.view.decoration.GridSpacesItemDecoration
 import dev.hong481.pixo.test.util.base.extension.lifecycleContext
 import dev.hong481.pixo.test.util.base.livedata.EventObserver
 
@@ -44,7 +44,7 @@ class AlbumListFragment : BaseFragment<FragmentAlbumListBinding>() {
                 viewModel
             )
             this.addItemDecoration(
-                SpacesItemDecoration(
+                GridSpacesItemDecoration(
                     spanCount = RECYCLE_VIEW_SPAN_COUNT,
                     spacing = context.resources.getDimensionPixelSize(R.dimen.album_list_padding)
                 )

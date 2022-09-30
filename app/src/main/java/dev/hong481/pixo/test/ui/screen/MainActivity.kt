@@ -3,6 +3,7 @@ package dev.hong481.pixo.test.ui.screen
 
 import android.Manifest
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
@@ -15,9 +16,8 @@ import dev.hong481.pixo.test.R
 import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.databinding.ActivityMainBinding
 import dev.hong481.pixo.test.ui.base.activity.BaseActivity
-import dev.hong481.pixo.test.util.DisplayUtil
+import dev.hong481.pixo.test.ui.screen.editphoto.EditPhotoFragmentDirections
 import dev.hong481.pixo.test.util.base.livedata.EventObserver
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -119,10 +119,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }"
                 )
                 binding.actionBarPhoto.run {
-                    val selectedAlbum = args?.getSerializable(Album.key) as? Album
-                    selectedAlbum?.let {
-                        viewModel.setSelectedAlbum(it)
-                    }
+                    val selectedAlbum: Album? =
+                        (args?.getSerializable(Album.KEY_ALBUM) as? Album)?.also {
+                            viewModel.setSelectedAlbum(it)
+                        }
                     when (destination.id) {
                         // Back
                         R.id.photoPickerFragment -> {
@@ -132,7 +132,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         }
                         // Back
                         R.id.editPhotoFragment -> this.imgBtnBack.setOnClickListener {
-                            viewModel.actionMoveToPhotoPickerEvent()
+                            viewModel.actionMoveToPhotoPickerEvent(
+                                album = selectedAlbum ?: return@setOnClickListener
+                            )
                         }
                     }
                 }
@@ -153,7 +155,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             navController.navigate(R.id.albumListFragment)
         }
         is MainViewModel.ViewEvent.ActionMoveToPhotoPicker -> {
-            navController.navigate(R.id.photoPickerFragment)
+            navController.navigate(R.id.photoPickerFragment, Bundle().apply {
+                putSerializable(Album.KEY_ALBUM, event.selectedAlbum)
+            })
         }
         else -> Unit
     }

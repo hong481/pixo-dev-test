@@ -8,7 +8,6 @@ import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.ui.base.viewmodel.BaseViewModel
 import dev.hong481.pixo.test.util.base.extension.notify
 import dev.hong481.pixo.test.util.base.extension.postNotify
-import dev.hong481.pixo.test.util.base.extension.setValueIfNew
 import dev.hong481.pixo.test.util.base.livedata.Event
 import javax.inject.Inject
 
@@ -28,7 +27,6 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
      */
     private val _selectedAlbum = MutableLiveData<Album?>()
     val selectedAlbum: LiveData<Album?> = _selectedAlbum
-
 
     /**
      * PhotoAppbar Title Text
@@ -65,12 +63,7 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     /**
      * 사진 선택 Fragment 이동 이벤트.
      */
-    fun actionMoveToPhotoPickerEvent() = viewEvent(ViewEvent.ActionMoveToPhotoPicker())
-
-    /**
-     * 사진 편집 Fragment 이동 이벤트.
-     */
-    fun actionMoveToPhotoEditorEvent() = viewEvent(ViewEvent.ActionMoveToPhotoEditor())
+    fun actionMoveToPhotoPickerEvent(album: Album) = viewEvent(ViewEvent.ActionMoveToPhotoPicker(album))
 
 
     fun setSelectedAlbum(album: Album) {
@@ -82,11 +75,11 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
         object ActionMoveToAlbumList : ViewEvent()
 
         data class ActionMoveToPhotoPicker(
-            val selectedAlbum: Album? = null
+            val selectedAlbum: Album
         ) : ViewEvent()
 
         data class ActionMoveToPhotoEditor(
-            val selectedAlbum: Album? = null
+            val selectedPhoto: Album.Photo
         ) : ViewEvent()
     }
 }

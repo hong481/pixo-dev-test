@@ -20,15 +20,15 @@
         android:layout_height="match_parent"
         android:background="@color/color_fffbe6">
 
-        <Button
-            android:id="@+id/btn_next_nav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> mainViewModel.actionMoveToPhotoEditorEvent()}"
-            android:text="@string/next"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_album_photo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:paddingTop="16dp"
+            android:scrollbars="none"
+            app:items="@{viewModel.photoList}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

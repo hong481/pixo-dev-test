@@ -74,6 +74,7 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:${rootProject.ext.glideVersion}"
     annotationProcessor "com.github.bumptech.glide:compiler:${rootProject.ext.glideVersion}"
+    implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
 
     // SVG library
     implementation "com.caverock:androidsvg-aar:${rootProject.ext.androidsvgVersion}"

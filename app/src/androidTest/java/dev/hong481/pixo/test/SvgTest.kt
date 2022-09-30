@@ -5,6 +5,7 @@ import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.util.Log
 import android.graphics.Canvas
+import android.graphics.RectF
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.hong481.pixo.test.util.SVGUtil
@@ -47,7 +48,14 @@ class SvgTest {
 
             Log.d(TAG, "testSvgUtil. before svg render. bitmap:${bitmap}")
 
-            svgUtil.renderSVGToCanvas(Canvas(bitmap), assetManager.open(TEST_SVG_ASSET_PATH))
+            svgUtil.renderSVGToCanvas(
+                Canvas(bitmap), assetManager.open(TEST_SVG_ASSET_PATH), RectF(
+                    0f,
+                    0f,
+                    100f,
+                    100f
+                )
+            )
 
             Log.d(TAG, "testSvgUtil. after svg render. bitmap:${bitmap}")
 

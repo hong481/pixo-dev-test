@@ -1,5 +1,6 @@
 package dev.hong481.pixo.test.ui.base.recyclerview
 
+import android.content.res.AssetManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,13 @@ abstract class BaseRecyclerViewHolder<T>(
     itemView: View
 
 ) : RecyclerView.ViewHolder(itemView) {
+
+    /**
+     * [AssetManager]
+     */
+    val assetManager: AssetManager by lazy {
+        itemView.context.resources.assets
+    }
 
     private val _item: MutableLiveData<T> = MutableLiveData()
     val item: LiveData<T> = _item

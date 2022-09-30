@@ -1,27 +1,34 @@
 package dev.hong481.pixo.test.ui.screen.editphoto
 
-import android.graphics.Canvas
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.hong481.pixo.test.data.model.Sticker
+import dev.hong481.pixo.test.data.repository.StickerRepository
 import dev.hong481.pixo.test.ui.base.viewmodel.BaseViewModel
-import dev.hong481.pixo.test.util.SVGUtil
-import java.io.InputStream
 import javax.inject.Inject
 
 
 @HiltViewModel
 class EditPhotoViewModel @Inject constructor(
-    private val svgUtil: SVGUtil
-) : BaseViewModel() {
+    private val svgStickerRepository: StickerRepository
+) : BaseViewModel(), StickerViewHolder.ViewModel {
 
     companion object {
         const val TAG = "EditPhotoViewModel"
     }
 
     /**
-     * SVG 렌더 테스트.
+     * 스티커 리스트.
      */
-    fun testSVGRender(canvas: Canvas, inputStream: InputStream) {
-        svgUtil.renderSVGToCanvas(canvas = canvas, inputStream = inputStream)
+    val stickerList: LiveData<List<Sticker>> =
+        MutableLiveData(svgStickerRepository.getStickerList())
+
+    fun getSvgStickerList() {
+        svgStickerRepository.getStickerList()
+    }
+
+    override fun selectSticker(sticker: Sticker) {
+        // todo
     }
 }

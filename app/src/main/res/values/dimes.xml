@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="album_list_padding">8dp</dimen>
+    <dimen name="photo_list_padding">2dp</dimen>
+    <dimen name="sticker_list_padding">16dp</dimen>
 </resources>

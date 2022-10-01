@@ -28,8 +28,26 @@
             android:paddingHorizontal="6dp"
             android:paddingVertical="16dp"
             android:scrollbars="none"
+            app:isVisibility="@{mainViewModel.isPermissionAllow() == true}"
             app:items="@{viewModel.albumList}"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/tv_permission_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="50dp"
+            android:text="@string/disallowed_permission_alert"
+            android:textColor="@color/color_336959"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:isVisibility="@{mainViewModel.isPermissionAllow() == false}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

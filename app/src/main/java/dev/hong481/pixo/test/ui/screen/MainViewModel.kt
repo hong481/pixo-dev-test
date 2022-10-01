@@ -2,15 +2,14 @@ package dev.hong481.pixo.test.ui.screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.ui.base.viewmodel.BaseViewModel
 import dev.hong481.pixo.test.util.base.extension.notify
 import dev.hong481.pixo.test.util.base.extension.postNotify
+import dev.hong481.pixo.test.util.base.livedata.EmptyEvent
 import dev.hong481.pixo.test.util.base.livedata.Event
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +24,16 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
         get() = _eventLiveData
 
     /**
+     * Permission 허용 여부.
+     */
+    private val _isPermissionAllow = MutableLiveData(false)
+    val isPermissionAllow: LiveData<Boolean> = _isPermissionAllow
+
+    fun setPermissionAllow(isAllow: Boolean) {
+        _isPermissionAllow.value = isAllow
+    }
+
+    /**
      * 선택된 [Album]
      */
     private val _selectedAlbum = MutableLiveData<Album?>()
@@ -36,6 +45,14 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     val photoAppBarTitleText: LiveData<String> = _selectedAlbum.map {
         it?.name ?: ""
     }
+
+    /**
+     * Overlay Event.
+     */
+    private val _eventOverlay = MutableLiveData<EmptyEvent>()
+    val eventOverlay: LiveData<EmptyEvent> = _eventOverlay
+
+    fun doEventOverlay() = _eventOverlay.notify()
 
     /**
      * PhotoAppbar Overlay Button Visible.

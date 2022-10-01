@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">pixo_dev_test</string>
+    <string name="app_name">PixoTest</string>
 
     <string name="title_activity_main">MainActivity</string>
 
@@ -17,4 +17,5 @@
     <string name="iv_content_description">ImageView</string>
     <string name="ib_content_description">ImageButton</string>
     <string name="overlay">Overlay</string>
+    <string name="disallowed_permission_alert">Permissions are required to view album images.\nPlease allow permission in [Settings].</string>
 </resources>

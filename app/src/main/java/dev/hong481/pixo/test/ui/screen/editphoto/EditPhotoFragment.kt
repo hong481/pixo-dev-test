@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -16,6 +17,7 @@ import dev.hong481.pixo.test.databinding.FragmentEditPhotoBinding
 import dev.hong481.pixo.test.ui.base.fragment.BaseFragment
 import dev.hong481.pixo.test.ui.screen.MainViewModel
 import dev.hong481.pixo.test.ui.view.decoration.HorizontalSpaceItemDecoration
+import dev.hong481.pixo.test.util.BitmapUtil
 import dev.hong481.pixo.test.util.SVGUtil
 import dev.hong481.pixo.test.util.base.livedata.EventObserver
 import javax.inject.Inject
@@ -35,6 +37,9 @@ class EditPhotoFragment : BaseFragment<FragmentEditPhotoBinding>() {
 
     @Inject
     lateinit var svgUtil: SVGUtil
+
+    @Inject
+    lateinit var bitmapUtil: BitmapUtil
 
     override fun getLayoutRes(): Int = R.layout.fragment_edit_photo
 
@@ -110,5 +115,21 @@ class EditPhotoFragment : BaseFragment<FragmentEditPhotoBinding>() {
         else -> Unit
     }
 
+    /**
+     * 캔버스를 갤러리에 저장.
+     */
+    fun canvasToGallery(done: () -> Unit) {
+        val album = args.album
+        val bitmap = binding.vCanvas.drawable.toBitmap()
+        context?.let {
+            bitmapUtil.saveToGallery(
+                context = it,
+                bitmap = bitmap,
+                albumName = album?.name ?: "",
+                done = done
+            )
+
+        }
+    }
 
 }

@@ -9,6 +9,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +17,8 @@ import dev.hong481.pixo.test.R
 import dev.hong481.pixo.test.data.model.Album
 import dev.hong481.pixo.test.databinding.ActivityMainBinding
 import dev.hong481.pixo.test.ui.base.activity.BaseActivity
-import dev.hong481.pixo.test.ui.screen.editphoto.EditPhotoFragmentDirections
+import dev.hong481.pixo.test.ui.screen.albumlist.AlbumListFragment
+import dev.hong481.pixo.test.ui.screen.editphoto.EditPhotoFragment
 import dev.hong481.pixo.test.util.base.livedata.EventObserver
 
 @AndroidEntryPoint
@@ -42,13 +44,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initView() {
         initNav()
+        initActionBarPhoto()
     }
 
     override fun initViewModel() {
-        // todo Request Permission.
-
         viewModel.eventLiveData.observe(this, EventObserver {
             handleViewEvent(it)
+            viewModel.setIsVisibleOverlayButton(false)
+        })
+        viewModel.eventOverlay.observe(this, EventObserver {
+            doOverlay()
         })
 
     }
@@ -62,14 +67,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         when (requestCode) {
             READ_EXTERNAL_STORAGE_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
-                    //  todo
+                    doAlbumListRefresh()
+                    viewModel.setPermissionAllow(true)
                 } else {
                     val showRationale = ActivityCompat.shouldShowRequestPermissionRationale(
                         this,
                         Manifest.permission.READ_EXTERNAL_STORAGE
                     )
                     if (!showRationale) {
-                        // todo
+                        viewModel.setPermissionAllow(false)
                     }
                 }
             }
@@ -83,6 +89,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         if (!haveStoragePermission()) {
             val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
             ActivityCompat.requestPermissions(this, permissions, READ_EXTERNAL_STORAGE_REQUEST)
+        } else {
+            viewModel.setPermissionAllow(true)
         }
     }
 
@@ -140,7 +148,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
             }
         }
-        viewModel.setCurrentDestination(destination.id)
+    }
+
+    private fun initActionBarPhoto() {
+        binding.actionBarPhoto.btnOverlay.setOnClickListener {
+            viewModel.doEventOverlay()
+        }
+    }
+
+    private fun doOverlay() {
+        val navHostFragment: Fragment? = supportFragmentManager.primaryNavigationFragment
+        val fragment: Fragment = navHostFragment?.childFragmentManager?.fragments?.get(0) ?: return
+        if (fragment is EditPhotoFragment) {
+            fragment.canvasToGallery {
+                viewModel.actionMoveToAlbumListEvent()
+            }
+        }
+    }
+
+    private fun doAlbumListRefresh() {
+        val navHostFragment: Fragment? = supportFragmentManager.primaryNavigationFragment
+        val fragment: Fragment = navHostFragment?.childFragmentManager?.fragments?.get(0) ?: return
+        if (fragment is AlbumListFragment) {
+            fragment.refreshAlbumList()
+        }
     }
 
     /**

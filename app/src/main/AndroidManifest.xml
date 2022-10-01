@@ -17,7 +17,6 @@
         <activity
             android:name=".ui.screen.MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_main"
             android:theme="@style/Theme.Pixo_dev_test.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

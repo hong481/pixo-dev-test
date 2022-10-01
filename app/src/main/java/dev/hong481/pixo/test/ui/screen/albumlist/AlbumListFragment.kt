@@ -53,6 +53,7 @@ class AlbumListFragment : BaseFragment<FragmentAlbumListBinding>() {
         }
     }
 
+
     override fun initViewModel() {
         mainViewModel.eventLiveData.observe(viewLifecycleOwner, EventObserver {
             handleMainViewEvent(it)
@@ -77,5 +78,12 @@ class AlbumListFragment : BaseFragment<FragmentAlbumListBinding>() {
             }
             else -> {}
         }
+    }
+
+    /**
+     * 앨범 리스트 새로고침.
+     */
+    fun refreshAlbumList() {
+        viewModel.refreshAlbumList()
     }
 }

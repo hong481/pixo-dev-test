@@ -2,17 +2,16 @@ package dev.hong481.pixo.test.ui.view.canvas
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Matrix
 import android.net.Uri
 import android.util.AttributeSet
 import android.util.Log
-import androidx.core.graphics.scale
-import dev.hong481.pixo.test.util.*
+import dev.hong481.pixo.test.util.overlayBitmap
+import dev.hong481.pixo.test.util.scalePreserveRatio
+import dev.hong481.pixo.test.util.trim
+import dev.hong481.pixo.test.util.uriToBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
@@ -29,7 +28,7 @@ class OverlayCanvas constructor(
     /**
      * 사진 [Bitmap].
      */
-    private var photoBitmap: Bitmap? = null
+    var photoBitmap: Bitmap? = null
 
     /**
      * 초기화.
@@ -55,13 +54,12 @@ class OverlayCanvas constructor(
                 // todo Trim 속도가 Slow 하므로 개선 필요.
                 val trimBitmap = bitmap.trim(Color.TRANSPARENT)
 
-                val scaledBitmap = trimBitmap.scalePreserveRatio(photoBitmap.width, photoBitmap.width)
+                val scaledBitmap =
+                    trimBitmap.scalePreserveRatio(photoBitmap.width, photoBitmap.width)
                 val finalBitmap = photoBitmap.overlayBitmap(scaledBitmap)
                 CoroutineScope(Dispatchers.Main).launch {
                     setImageBitmap(finalBitmap)
-                    done?.let {
-                        it()
-                    }
+                    done?.invoke()
                 }
             } catch (e: Exception) {
                 Log.d(TAG, "overlay. error: ${e.stackTraceToString()}")

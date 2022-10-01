@@ -1,13 +1,22 @@
 package dev.hong481.pixo.test.util
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.*
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.core.graphics.scale
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStream
 import java.lang.Integer.min
 import kotlin.math.floor
+
 
 /**
  * [BitmapUtil] Util 클래스.
@@ -18,6 +27,61 @@ class BitmapUtil {
 
     companion object {
         const val TAG = "BitmapUtil"
+
+        const val SAVE_QUALITY = 100
+
+
+        const val EXTENSION_PNG = ".png"
+        const val MIME_TYPE_PNG = "image/png"
+    }
+
+    /**
+     * 갤러리 저장.
+     */
+    fun saveToGallery(
+        context: Context,
+        bitmap: Bitmap,
+        albumName: String,
+        done: (() -> Unit)? = null
+    ) {
+
+        try {
+            val filename = "${System.currentTimeMillis()}$EXTENSION_PNG"
+            val write: (OutputStream) -> Boolean = {
+                bitmap.compress(Bitmap.CompressFormat.PNG, SAVE_QUALITY, it)
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                    put(MediaStore.MediaColumns.MIME_TYPE, MIME_TYPE_PNG)
+                    put(
+                        MediaStore.MediaColumns.RELATIVE_PATH,
+                        "${Environment.DIRECTORY_DCIM}/$albumName"
+                    )
+                }
+                context.contentResolver.let {
+                    it.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                        ?.let { uri ->
+                            it.openOutputStream(uri)?.use(write)
+
+                        }
+                }
+            } else {
+                val imagesDir =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                        .toString() + File.separator + albumName
+                val file = File(imagesDir)
+                if (!file.exists()) {
+                    file.mkdir()
+                }
+                val image = File(imagesDir, filename)
+                write(FileOutputStream(image))
+            }
+            done?.invoke()
+        } catch (e: Exception) {
+            Log.d(TAG, "saveToGallery. error: ${e.stackTraceToString()}")
+        }
     }
 }
 
@@ -97,6 +161,8 @@ fun Bitmap.scalePreserveRatio(
 /**
  *
  * [Bitmap] 특정 픽셀 trim.
+ *
+ * todo 속도 개선 필요.
  */
 fun Bitmap.trim(
     @ColorInt color: Int = Color.TRANSPARENT

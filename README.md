@@ -1,2 +1,2 @@
-# pixo_dev_test
+# pixo-dev-test
 [Pixo] Dev Test Android Local
